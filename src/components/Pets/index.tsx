@@ -20,8 +20,6 @@ interface Pet {
   owner?: string
 }
 
-const apiUrl: any = process.env.REACT_APP_API_URL
-
 export const Pets = () => {
   const [pets, setPets] = useState<Pet[]>([])
   const [newPet, setNewPet] = useState<Pet>({
@@ -41,7 +39,7 @@ export const Pets = () => {
   })
 
   async function loadPets() {
-    const response = await axios.get(apiUrl + '/pets')
+    const response = await axios.get('http://localhost:3000/pets')
     const petsData = await response.data
     setPets(petsData.data)
   }
@@ -55,7 +53,7 @@ export const Pets = () => {
     }
 
     if (isEditing) {
-      await axios.put(`${apiUrl} + ' /pets/${selectedPet.id}`, newPet)
+      await axios.put(`http://localhost:3000/${selectedPet.id}`, newPet)
       setIsEditing(false)
     } else {
       const response = await axios.post('http://localhost:3000/pets', newPet)
@@ -67,7 +65,7 @@ export const Pets = () => {
   }
 
   async function handleDeletePet(id: number) {
-    await axios.delete(`${apiUrl} + /pets/${id}`)
+    await axios.delete(`http://localhost:3000/pets/${id}`)
     const filteredPets = pets.filter((pet) => pet.id !== id)
     setPets(filteredPets)
   }
@@ -80,7 +78,7 @@ export const Pets = () => {
       return
     }
 
-    await axios.put(`${apiUrl} + /pets/${selectedPet.id}`, newPet)
+    await axios.put(`http://localhost:3000/pets/${selectedPet.id}`, newPet)
     setPets(
       pets.map((pet) => {
         if (pet.id === selectedPet.id) {
