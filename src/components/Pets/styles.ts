@@ -26,7 +26,7 @@ export const PetsContainer = styled.main`
       border: 0;
       background: ${(props) => props.theme['gray-800']};
       color: ${(props) => props.theme['gray-300']};
-      padding: 1rem;
+      padding: 0.85rem;
 
       &::placeholder {
         color: ${(props) => props.theme['gray-500']};
@@ -36,37 +36,68 @@ export const PetsContainer = styled.main`
     input[type='number'] {
       width: 80px;
     }
+  }
+`
 
-    button[type='submit'] {
-      height: 32px;
-      border: 0;
-      background: ${(props) => props.theme['green-500']};
-      color: ${(props) => props.theme['gray-700']};
-      font-weight: bold;
-      border-radius: 6px;
-      cursor: pointer;
-      padding: 0 0.5rem;
+export const LayoutButton = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.3rem;
 
-      &:hover {
-        filter: brightness(1.2);
-        transition: background-color 0.2s;
-      }
+  button[type='submit'] {
+    height: 20px;
+    border: 0;
+    background: ${(props) => props.theme['green-500']};
+    color: ${(props) => props.theme['gray-700']};
+    font-size: 0.8rem;
+
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    padding: 0 0.5rem;
+
+    &:hover {
+      filter: brightness(1.2);
+      transition: background-color 0.2s;
     }
+  }
 
-    button[type='button'] {
-      height: 32px;
-      border: 0;
-      background: ${(props) => props.theme['yellow-500']};
-      color: ${(props) => props.theme['gray-700']};
-      font-weight: bold;
-      border-radius: 6px;
-      cursor: pointer;
-      padding: 0 0.5rem;
+  button[type='button'] {
+    height: 20px;
+    border: 0;
+    background: ${(props) => props.theme['yellow-500']};
+    color: ${(props) => props.theme['gray-700']};
+    font-size: 0.8rem;
 
-      &:hover {
-        filter: brightness(1.2);
-        transition: background-color 0.2s;
-      }
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    padding: 0 0.5rem;
+
+    &:hover {
+      filter: brightness(1.2);
+      transition: background-color 0.2s;
+    }
+  }
+`
+export const RegisterButton = styled.div`
+  button[type='submit'] {
+    height: 45px;
+    border: 0;
+    background: ${(props) => props.theme['green-500']};
+    color: ${(props) => props.theme['gray-700']};
+    font-size: 0.8rem;
+
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    padding: 0 0.5rem;
+
+    &:hover {
+      filter: brightness(1.2);
+      transition: background-color 0.2s;
     }
   }
 `
@@ -100,7 +131,7 @@ export const PetsTable = styled.table`
   }
 
   td {
-    padding: 1.25rem 2rem;
+    padding: 1.25rem 3.3rem;
     background: ${(props) => props.theme['gray-700']};
 
     &:first-child {
@@ -113,12 +144,22 @@ export const PetsTable = styled.table`
       border-bottom-right-radius: 6px;
     }
   }
+
+  p {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    padding: 1rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
 `
 
 export const EditButton = styled.button`
   border: 0;
   border-radius: 4px;
   font-weight: bold;
+  font-size: 0.9rem;
   background: ${(props) => props.theme['green-300']};
   color: ${(props) => props.theme['gray-700']};
   padding: 0 0.5rem;

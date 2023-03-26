@@ -1,6 +1,5 @@
 // Components
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
 
 // Styles
 import {
@@ -9,6 +8,8 @@ import {
   EditButton,
   TrashButton,
   StyledTable,
+  LayoutButton,
+  RegisterButton,
 } from './styles'
 import { Trash } from 'phosphor-react'
 
@@ -38,10 +39,14 @@ export const Pets = () => {
     owner: '',
   })
 
+  async function getPetsData() {
+    const petsData = localStorage.getItem('pets')
+    return petsData ? JSON.parse(petsData) : []
+  }
+
   async function loadPets() {
-    const response = await axios.get('http://localhost:3000/pets')
-    const petsData = await response.data
-    setPets(petsData.data)
+    const petsData = getPetsData()
+    setPets(await petsData)
   }
 
   async function handleCreatePet(event: React.FormEvent<HTMLFormElement>) {
@@ -53,21 +58,29 @@ export const Pets = () => {
     }
 
     if (isEditing) {
-      await axios.put(`http://localhost:3000/${selectedPet.id}`, newPet)
+      // update existing pet
+      const updatedPets = pets.map((pet) => {
+        if (pet.id === selectedPet.id) {
+          return newPet
+        }
+        return pet
+      })
+      localStorage.setItem('pets', JSON.stringify(updatedPets))
       setIsEditing(false)
     } else {
-      const response = await axios.post('http://localhost:3000/pets', newPet)
-      const petsData = await response.data
-      setPets([...pets, petsData.data])
+      // add new pet
+      const newPets = [...pets, newPet]
+      localStorage.setItem('pets', JSON.stringify(newPets))
     }
 
+    setPets(await getPetsData())
     setNewPet({ id: 0, name: '', breed: '', age: 0, owner: '' } as Pet)
   }
 
   async function handleDeletePet(id: number) {
-    await axios.delete(`http://localhost:3000/pets/${id}`)
     const filteredPets = pets.filter((pet) => pet.id !== id)
-    setPets(filteredPets)
+    localStorage.setItem('pets', JSON.stringify(filteredPets))
+    setPets(await getPetsData())
   }
 
   async function handleUpdatePet(event: React.FormEvent<HTMLFormElement>) {
@@ -78,15 +91,16 @@ export const Pets = () => {
       return
     }
 
-    await axios.put(`http://localhost:3000/pets/${selectedPet.id}`, newPet)
-    setPets(
-      pets.map((pet) => {
-        if (pet.id === selectedPet.id) {
-          return newPet
-        }
-        return pet
-      }),
-    )
+    const updatedPets = pets.map((pet) => {
+      if (pet.id === selectedPet.id) {
+        return newPet
+      }
+      return pet
+    })
+    localStorage.setItem('pets', JSON.stringify(updatedPets))
+
+    setPets(await getPetsData())
+
     setIsEditing(false)
     setNewPet({ id: 0, name: '', breed: '', age: 0, owner: '' } as Pet)
   }
@@ -105,6 +119,7 @@ export const Pets = () => {
 
   useEffect(() => {
     loadPets()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newPet])
 
   return (
@@ -126,7 +141,7 @@ export const Pets = () => {
               {pets.map((pet) => {
                 return (
                   <tr key={pet.id}>
-                    <td width="50%">{pet.name}</td>
+                    <td>{pet.name}</td>
                     <td>{pet.breed}</td>
                     <td>{pet.age}</td>
                     <td>{pet.owner}</td>
@@ -147,7 +162,9 @@ export const Pets = () => {
           ) : (
             <tbody>
               <tr>
-                <td colSpan={3}>Não há pets para exibir</td>
+                <td colSpan={7}>
+                  <p>Não há pets para exibir</p>
+                </td>
               </tr>
             </tbody>
           )}
@@ -184,7 +201,7 @@ export const Pets = () => {
           onChange={(e) => setNewPet({ ...newPet, owner: e.target.value })}
         />
         {isEditing ? (
-          <>
+          <LayoutButton>
             <button type="submit">
               {isEditing ? 'Atualizar' : 'Cadastrar'}
             </button>
@@ -197,9 +214,11 @@ export const Pets = () => {
             >
               Cancelar
             </button>
-          </>
+          </LayoutButton>
         ) : (
-          <button type="submit">Cadastrar</button>
+          <RegisterButton>
+            <button type="submit">Cadastrar</button>
+          </RegisterButton>
         )}
       </form>
     </PetsContainer>
