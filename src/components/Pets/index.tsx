@@ -1,5 +1,6 @@
 // Components
 import React, { useEffect, useState } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 
 // Styles
 import {
@@ -45,7 +46,7 @@ export const Pets = () => {
   }
 
   async function loadPets() {
-    const petsData = getPetsData()
+    const petsData = await getPetsData()
     setPets(await petsData)
   }
 
@@ -57,11 +58,13 @@ export const Pets = () => {
       return
     }
 
+    const petWithId = { ...newPet, id: uuidv4() } // generate a random id for the new pet
+
     if (isEditing) {
       // update existing pet
       const updatedPets = pets.map((pet) => {
         if (pet.id === selectedPet.id) {
-          return newPet
+          return petWithId
         }
         return pet
       })
@@ -69,7 +72,7 @@ export const Pets = () => {
       setIsEditing(false)
     } else {
       // add new pet
-      const newPets = [...pets, newPet]
+      const newPets = [...pets, petWithId]
       localStorage.setItem('pets', JSON.stringify(newPets))
     }
 
